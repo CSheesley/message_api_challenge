@@ -29,3 +29,6 @@
 # Temporarily Ignore
 README.md
 notes.md
+
+# Ignore coverage files
+coverage/
