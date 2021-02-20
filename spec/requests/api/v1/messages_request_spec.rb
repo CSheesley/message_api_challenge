@@ -7,9 +7,9 @@ RSpec.describe Api::V1::MessagesController, type: :request do
     context 'with valid parameters' do
       it 'creates a Message object' do
         valid_params = {
-          body: 'a short message',
           recipient: 'abbey',
-          sender: 'corey'
+          sender: 'corey',
+          body: 'a short message'
         }
 
         expect {
@@ -41,13 +41,13 @@ RSpec.describe Api::V1::MessagesController, type: :request do
       end
 
       it 'does not create a Message object - missing :recipient' do
-        missing_body_params = {
-          body: 'a short message',
-          sender: 'corey'
+        missing_sender_params = {
+          sender: 'corey',
+          body: 'a short message'
         }
 
         expect {
-          post '/api/v1/messages', params: missing_body_params
+          post '/api/v1/messages', params: missing_sender_params
         }.to_not change { Message.count }
 
         parsed_response = JSON.parse(response.body, symbolize_names: true)
@@ -57,13 +57,13 @@ RSpec.describe Api::V1::MessagesController, type: :request do
       end
 
       it 'does not create a Message object - missing :sender' do
-        missing_body_params = {
-          body: 'a short message',
+        missing_recipient_params = {
           recipient: 'abbey',
+          body: 'a short message'
         }
 
         expect {
-          post '/api/v1/messages', params: missing_body_params
+          post '/api/v1/messages', params: missing_recipient_params
         }.to_not change { Message.count }
 
         parsed_response = JSON.parse(response.body, symbolize_names: true)
