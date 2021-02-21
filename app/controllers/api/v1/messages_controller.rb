@@ -1,8 +1,8 @@
 class Api::V1::MessagesController < ApplicationController
 
   def index
-    messages = Search::MessagesFilter.new(message_params)
-    render status: 200, json: MessagesSerializer.new(messages).formatted_data
+    messages = Search::MessagesFilter.new(message_params).results
+    render status: 200, json: MessagesSerializer.new(messages).serialized_hash
   end
 
   def create

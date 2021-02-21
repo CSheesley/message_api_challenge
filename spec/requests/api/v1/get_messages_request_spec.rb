@@ -7,31 +7,31 @@ RSpec.describe Api::V1::MessagesController, type: :request do
     context 'with valid parameters' do
 
       it 'returns Message JSON - sent to a :recipient' do
-        message1 = Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence)
-        message2 = Message.create(recipient: 'corey', sender: 'billy', body: Faker::Lorem.sentence)
+        message1 = Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence, created_at: 1.minute.ago)
+        message2 = Message.create(recipient: 'corey', sender: 'billy', body: Faker::Lorem.sentence, created_at: 2.minutes.ago)
 
         get '/api/v1/messages', params: { recipient: 'corey' }
 
-        parsed_response = JSON.parse(response.body)
-        expected_meeting_data = {
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+        expected_response = {
           "messages": [
             {
               "sender": message1.sender,
               "message_id": message1.id,
-              "created_at": message1.created_at,
+              "created_at": message1.created_at.strftime('%m-%d-%Y %H:%M:%S %Z'),
               "body": message1.body
             },
             {
               "sender": message2.sender,
               "message_id": message2.id,
-              "created_at": message2.created_at,
+              "created_at": message2.created_at.strftime('%m-%d-%Y %H:%M:%S %Z'),
               "body": message2.body
             }
           ]
         }
 
         expect(response).to have_http_status(200)
-        expect(parsed_response).to eq(expected_meeting_data)
+        expect(parsed_response).to eq(expected_response)
       end
 
       it 'returns Message JSON - sent to a :recipient, from all senders if no :sender specified' do
