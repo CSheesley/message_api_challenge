@@ -62,9 +62,11 @@ RSpec.describe Search::MessagesFilter, type: :service do
       end
 
       it 'limits the number of message results to 100' do
-      end
+        125.times { Message.create(recipient: 'corey', sender: Faker::Name.first_name, body: Faker::Lorem.sentence) }
 
-      it 'applies both the 100 message limit and :created_at filtering' do
+        corey_msgs = Search::MessagesFilter.new({ recipient: 'corey' }).results
+
+        expect(corey_msgs.count).to eq(100)
       end
     end
   end

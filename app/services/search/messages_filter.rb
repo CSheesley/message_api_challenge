@@ -10,6 +10,7 @@ class Search::MessagesFilter
     scope = scope_base
     scope = apply_sender_filter(scope)
     scope = apply_last_month_filter(scope)
+    scope = apply_count_limit_filter(scope)
     scope = sort_newest_to_oldest(scope)
 
     return scope
@@ -29,6 +30,10 @@ class Search::MessagesFilter
 
   def apply_last_month_filter(scope)
     scope.where(created_at: 29.days.ago.beginning_of_day..0.days.ago.end_of_day)
+  end
+
+  def apply_count_limit_filter(scope)
+    scope.limit(100)
   end
 
   def sort_newest_to_oldest(scope)
