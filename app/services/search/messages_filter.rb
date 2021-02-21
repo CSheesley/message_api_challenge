@@ -9,7 +9,8 @@ class Search::MessagesFilter
   def results
     scope = scope_base
     scope = apply_sender_filter(scope)
-
+    scope = sort_newest_to_oldest(scope)
+    
     return scope
   end
 
@@ -23,5 +24,9 @@ class Search::MessagesFilter
     return scope unless @sender
 
     scope.where(sender: @sender)
+  end
+
+  def sort_newest_to_oldest(scope)
+    scope.order(created_at: :desc)
   end
 end
