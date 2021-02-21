@@ -112,9 +112,15 @@ RSpec.describe Api::V1::MessagesController, type: :request do
       end
     end
 
-    context 'with missing params' do
+    context 'with a missing or non-existent :recipient' do
 
       it 'returns an error message if missing :recipient param' do
+        get '/api/v1/messages', params: { }
+
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(422)
+        expect(parsed_response[:errors]).to eq("Missing required :recipient param")
       end
     end
   end
