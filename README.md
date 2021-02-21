@@ -13,15 +13,20 @@ security is not a concern.
 
 Please see the **DESIGN DECISIONS AND INSIGHTS** section at the bottom for more information on thoughts and decisions that were made along the way.
 
+My **areas of emphasis** during this project were:
+- Creating functional API endpoints which meet the acceptance criteria of the challenge.
+- Following good MVC principles.
+- Adequately testing models, requests, and services.
+- Demonstrating proper git workflow practices - _(clean and ligical commit history, squashing when necessary)_
+- Providing good documentation for those who take a look at this project.
+
 
 ## API DOCUMENTATION
-[API Endpoint Documentation](/endpoint_documentation.md)
-- meention postman
+This project provides a single API endpoint where Message objects can be created or accessed, via GET and PUT requests with the necessary params: `/api/v1/messages`
 
-* Running things locally
-- rails s
-- postman or endpoints in server  
+Please see the [API Endpoint Documentation](/endpoint_documentation.md) for specific details.
 
+Tools such as [Postman]()
 
 ## SETUP
 
@@ -102,20 +107,20 @@ You can shut down the server at any point by entering: `Ctrl-C` from the command
 
 
 ## TESTING
-This project uses `RSpec` for running our tests - in this case wich are comprised of the `model` and `request` variety.
-
-To run the full test suite, run one of the following commands:
+This project uses `RSpec` for running our tests - in this case wich are comprised of the `model` and `request` variety. To run the full test suite, run one of the following commands:
 ```
 $ rspec
 
 $ bundle exec rspec
 ```
-To check our overall test coverage, you can open up this [test coverage page](/coverage/index.htlm) courtesy of `SimpleCov`. _Spoiler alert - its at 100%._
+To check our overall test coverage, you can open up a Test Coverage HTML page _(courtesy of `SimpleCov`)_ by running the following command in the this command from inside the terminal: `$ open coverage/index.html`
+ _Spoiler alert - its at 100%._
 
 
 ## DESIGN DECISIONS AND INSIGHTS
 * Would do
  - use User objects, with joins
+ snippet from other rep
   - ReceivedMessagesController
   - SentMessagesController
  - sanitize params more thoroughly to avoid dangerous data
@@ -124,3 +129,4 @@ To check our overall test coverage, you can open up this [test coverage page](/c
  - param input validations
 
  - work done on single 'main' branch. Normal workflow would be using feature_branches during the development lifecycl
+ - good commit history
