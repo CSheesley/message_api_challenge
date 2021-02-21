@@ -84,5 +84,4 @@ RSpec.describe Api::V1::MessagesController, type: :request do
       end
     end
   end
-
 end
