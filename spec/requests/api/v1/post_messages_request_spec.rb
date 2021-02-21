@@ -23,7 +23,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
       end
     end
 
-    context 'with invalid or missing params' do
+    context 'with missing params' do
       it 'does not create a Message object - missing :body' do
         missing_body_params = {
           recipient: 'abbey',
