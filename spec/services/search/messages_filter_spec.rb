@@ -35,7 +35,7 @@ RSpec.describe Search::MessagesFilter, type: :service do
       end
     end
 
-    context 'limiting to 100 results, and past 30 days' do
+    context 'sorting, limiting to 100 results, limiting past 30 days' do
 
       it 'returns messages in order of newest :created_at to oldest' do
         message1 = Timecop.freeze(Time.now - 5.days) { Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence) }

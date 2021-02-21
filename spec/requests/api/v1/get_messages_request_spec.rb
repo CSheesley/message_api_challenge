@@ -34,16 +34,15 @@ RSpec.describe Api::V1::MessagesController, type: :request do
         expect(parsed_response).to eq(expected_response)
       end
 
-      it 'returns Message JSON - sent to a :recipient, from all senders if no :sender specified' do
+      it 'returns Message JSON - sent to a :recipient, from all senders if no :sender is specified' do
         message1 = Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence)
         message2 = Message.create(recipient: 'corey', sender: 'billy', body: Faker::Lorem.sentence)
         message3 = Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence)
-        # this message should not be included
         message4 = Message.create(recipient: 'abbey', sender: 'billy', body: Faker::Lorem.sentence)
 
         get '/api/v1/messages', params: { recipient: 'corey' }
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
         response_msg_ids = parsed_response[:messages].map { |msg| msg[:message_id] }
 
         expect(response).to have_http_status(200)
@@ -60,7 +59,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
 
         get '/api/v1/messages', params: { recipient: 'corey', sender: 'abbey' }
 
-        parsed_response = JSON.parse(response.body)
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
         response_msg_ids = parsed_response[:messages].map { |msg| msg[:message_id] }
 
         expect(response).to have_http_status(200)
@@ -68,13 +67,48 @@ RSpec.describe Api::V1::MessagesController, type: :request do
         expect(response_msg_ids).to match_array([message1.id, message3.id])
       end
 
-      it 'returns Message JSON - with maximum of 100 messages' do
+      it 'returns Message JSON - limited to the last 30 days' do
+        message1 = Timecop.freeze(Time.now - 0.days)  { Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence) }
+        message2 = Timecop.freeze(Time.now - 29.days)  { Message.create(recipient: 'corey', sender: 'derek', body: Faker::Lorem.sentence) }
+        message3 = Timecop.freeze(Time.now - 30.days) { Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence) }
+        message4 = Timecop.freeze(Time.now - 99.days) { Message.create(recipient: 'corey', sender: 'derek', body: Faker::Lorem.sentence) }
+
+        get '/api/v1/messages', params: { recipient: 'corey' }
+
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+        response_msg_ids = parsed_response[:messages].map { |msg| msg[:message_id] }
+
+        expect(response).to have_http_status(200)
+        expect(parsed_response[:messages].count).to eq(2)
+        expect(response_msg_ids).to match_array([message1.id, message2.id])
       end
 
-      it 'returns Message JSON - limited to the last 30 days, if there are more than 100 messages' do
+      it 'returns Message JSON - with maximum of 100 messages' do
+        105.times { Message.create(recipient: 'corey', sender: Faker::Name.first_name, body: Faker::Lorem.sentence) }
+
+        get '/api/v1/messages', params: { recipient: 'corey' }
+
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+        response_msg_ids = parsed_response[:messages].map { |msg| msg[:message_id] }
+
+        expect(response).to have_http_status(200)
+        expect(parsed_response[:messages].count).to eq(100)
       end
 
       it 'returns Message JSON - in order from newest to oldest' do
+        message1 = Timecop.freeze(Time.now - 0.days) { Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence) }
+        message2 = Timecop.freeze(Time.now - 2.days) { Message.create(recipient: 'corey', sender: 'billy', body: Faker::Lorem.sentence) }
+        message3 = Timecop.freeze(Time.now - 3.days) { Message.create(recipient: 'corey', sender: 'derek', body: Faker::Lorem.sentence) }
+        message4 = Timecop.freeze(Time.now - 1.days) { Message.create(recipient: 'corey', sender: 'bobby', body: Faker::Lorem.sentence) }
+
+        get '/api/v1/messages', params: { recipient: 'corey' }
+
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+        response_msg_ids = parsed_response[:messages].map { |msg| msg[:message_id] }
+
+        expect(response).to have_http_status(200)
+        expect(parsed_response[:messages].count).to eq(4)
+        expect(response_msg_ids).to eq([message1.id, message4.id, message2.id, message3.id])
       end
     end
 
