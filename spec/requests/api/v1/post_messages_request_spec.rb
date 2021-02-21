@@ -18,7 +18,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
 
         parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response.status).to eq(201)
+        expect(response).to have_http_status(201)
         expect(parsed_response[:success]).to eq('Message created')
       end
     end
@@ -36,7 +36,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
 
         parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response.status).to eq(422)
+        expect(response).to have_http_status(422)
         expect(parsed_response[:errors]).to eq("Body can't be blank")
       end
 
@@ -52,7 +52,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
 
         parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response.status).to eq(422)
+        expect(response).to have_http_status(422)
         expect(parsed_response[:errors]).to eq("Recipient can't be blank")
       end
 
@@ -68,7 +68,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
 
         parsed_response = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response.status).to eq(422)
+        expect(response).to have_http_status(422)
         expect(parsed_response[:errors]).to eq("Sender can't be blank")
       end
     end
