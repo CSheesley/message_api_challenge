@@ -23,6 +23,15 @@ RSpec.describe Search::MessagesFilter, type: :service do
       end
 
       it 'can filter messages by :recipient and :sender' do
+        to_corey_from_billy = Search::MessagesFilter.new({ recipient: 'corey', sender: 'billy' }).results
+        to_corey_from_abbey = Search::MessagesFilter.new({ recipient: 'corey', sender: 'abbey' }).results
+        to_derek_from_tommy = Search::MessagesFilter.new({ recipient: 'derek', sender: 'tommy' }).results
+        to_derek_from_abbey = Search::MessagesFilter.new({ recipient: 'derek', sender: 'abbey' }).results
+
+        expect(to_corey_from_billy).to match_array([message2, message3, message4])
+        expect(to_corey_from_abbey).to match_array([message1])
+        expect(to_derek_from_tommy).to match_array([message5, message8])
+        expect(to_derek_from_abbey).to match_array([message6])
       end
     end
 

@@ -8,11 +8,18 @@ class Search::MessagesFilter
 
   def results
     scope = scope_base
+    scope = apply_sender_filter(scope)
+
+    return scope
   end
 
   private
 
   def scope_base
     Message.where(recipient: @recipient)
+  end
+
+  def apply_sender_filter(scope)
+    scope.where(sender: @sender)
   end
 end
