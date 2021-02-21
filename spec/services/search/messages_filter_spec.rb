@@ -48,7 +48,17 @@ RSpec.describe Search::MessagesFilter, type: :service do
         expect(corey_msgs).to eq([message2, message4, message1, message3])
       end
 
-      it 'limits message results to those :created_at in the past 30 days' do
+      it 'limits message results to those :created_at in the past 30 days, including today' do
+        message1 = Timecop.freeze(Time.now - 30.days) { Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence) }
+        message2 = Timecop.freeze(Time.now - 29.days) { Message.create(recipient: 'corey', sender: 'billy', body: Faker::Lorem.sentence) }
+        message3 = Timecop.freeze(Time.now - 60.days) { Message.create(recipient: 'corey', sender: 'derek', body: Faker::Lorem.sentence) }
+        message4 = Timecop.freeze(Time.now - 15.days) { Message.create(recipient: 'corey', sender: 'abbey', body: Faker::Lorem.sentence) }
+        message5 = Timecop.freeze(Time.now - 90.days) { Message.create(recipient: 'corey', sender: 'derek', body: Faker::Lorem.sentence) }
+        message6 = Timecop.freeze(Time.now - 0.days)  { Message.create(recipient: 'corey', sender: 'billy', body: Faker::Lorem.sentence) }
+
+        corey_msgs = Search::MessagesFilter.new({ recipient: 'corey' }).results
+
+        expect(corey_msgs).to match_array([message2, message4, message6])
       end
 
       it 'limits the number of message results to 100' do

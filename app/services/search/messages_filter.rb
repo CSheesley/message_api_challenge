@@ -9,8 +9,9 @@ class Search::MessagesFilter
   def results
     scope = scope_base
     scope = apply_sender_filter(scope)
+    scope = apply_last_month_filter(scope)
     scope = sort_newest_to_oldest(scope)
-    
+
     return scope
   end
 
@@ -24,6 +25,10 @@ class Search::MessagesFilter
     return scope unless @sender
 
     scope.where(sender: @sender)
+  end
+
+  def apply_last_month_filter(scope)
+    scope.where(created_at: 29.days.ago.beginning_of_day..0.days.ago.end_of_day)
   end
 
   def sort_newest_to_oldest(scope)
