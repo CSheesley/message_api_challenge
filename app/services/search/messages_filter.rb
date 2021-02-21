@@ -20,6 +20,8 @@ class Search::MessagesFilter
   end
 
   def apply_sender_filter(scope)
+    return scope unless @sender
+
     scope.where(sender: @sender)
   end
 end
