@@ -48,7 +48,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
 
         expect(response).to have_http_status(200)
         expect(parsed_response[:messages].count).to eq(3)
-        expect(response_msg_ids).to match_array([ message1.id, message2.id, message3.id ])
+        expect(response_msg_ids).to match_array([message1.id, message2.id, message3.id])
       end
 
       it 'returns Message JSON - sent to a :recipient, from a specific :sender' do
@@ -65,7 +65,7 @@ RSpec.describe Api::V1::MessagesController, type: :request do
 
         expect(response).to have_http_status(200)
         expect(parsed_response[:messages].count).to eq(2)
-        expect(response_msg_ids).to match_array([ message1.id, message3.id ])
+        expect(response_msg_ids).to match_array([message1.id, message3.id])
       end
 
       it 'returns Message JSON - with maximum of 100 messages' do
