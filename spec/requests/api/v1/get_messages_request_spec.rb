@@ -122,6 +122,19 @@ RSpec.describe Api::V1::MessagesController, type: :request do
         expect(response).to have_http_status(422)
         expect(parsed_response[:errors]).to eq("Missing required :recipient param")
       end
+
+      it 'returns an empty list of messages if no messages for the specified :recipients exist' do
+        message1 = Message.create(recipient: 'abbey', sender: 'bobby', body: Faker::Lorem.sentence)
+        message2 = Message.create(recipient: 'billy', sender: 'corey', body: Faker::Lorem.sentence)
+
+        get '/api/v1/messages', params: { recipient: 'casper' }
+
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(200)
+        expect(parsed_response[:messages].count).to eq(0)
+        expect(parsed_response[:messages]).to eq([])
+      end
     end
   end
 end
