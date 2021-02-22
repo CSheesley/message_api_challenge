@@ -26,9 +26,9 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 
-# Temporarily Ignore
-README.md
-notes.md
-
 # Ignore coverage files
 coverage/
+
+# Ignore your local sqlite3 databases
+message_api_challenge_development
+message_api_challenge_test
