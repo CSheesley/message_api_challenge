@@ -3,7 +3,7 @@
 ### Overview:
 **Message** objects can be created and accessed using the requests outlined below. This is a fairly simple working proof of concept API at this point, and does not include any authentication, or sanitization of data.
 
-Since this code is not deployed, this API endpoint can only be accessed by your **local server** address. In order for the requests listed below to work, you will need to have setup the database with the provided `seed.rb` data - and you will need to have a local server running, which can be done by entering `$ rails server` from the terminal while inside the project directory.
+Since this code is not deployed, this API endpoint can only be accessed by your **local server** address. In order for the requests listed below to work, you will need to have setup the database with the provided `seed.rb` data - and you will need to have a local server running, which can be done by entering `$ rails server` from the terminal while inside the project directory. _See README for setup instructions if needed_.
 
 ### How To:
 To try out these endpoints and make some API requests, you can you use an app like **[Postman](https://www.postman.com/downloads/)**, you can run **CURL** commands from the Terminal, or you can use the **Developer Tools** from you favorite browser, and edit requests to the endpoint that you enter into the address bar.
@@ -19,14 +19,14 @@ $ curl  http://localhost:3000/api/v1/messages\?recipient\=chad
 
 
 ### Response Defaults:
-By default, all responses will be:
+All responses will be:
 - **Sorted** in order of **newest to oldest**, based on the Message `:created_at` attribute.
 - **Limited** to Messages created in the **last 30 days**, based on the Message `:created_at` attribute..
 - **Limited** to a response of **100** Messages.
 
 ---
 
-## Endpoints:
+## ENDPOINTS:
 ---
 
 ### Create a Message:
